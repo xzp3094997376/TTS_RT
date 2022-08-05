@@ -20,6 +20,9 @@ public class TextToSpeech_ZH : MonoBehaviour
     //网页文字转语音
     private string _Url;
 
+    [Range(0,15)]
+    public int speed;
+
 
     private void Awake()
     {
@@ -44,13 +47,13 @@ public class TextToSpeech_ZH : MonoBehaviour
     //获取 Web网页音源信息并播放
     private IEnumerator GetAudioClip(string AudioText)
     {
-        //_Url = "https://tsn.baidu.com/text2audio?tex=" + AudioText + "+&lan=zh&cuid=7919875968150074&ctp=1&aue=6&tok=25.3141e5ae3aa109abb6fc9a8179131181.315360000.1886566986.282335-17539441";
+        _Url = $"https://tsn.baidu.com/text2audio?tex={AudioText}&lan=zh&cuid=7919875968150074&ctp=1&aue=6&tok=25.3141e5ae3aa109abb6fc9a8179131181.315360000.1886566986.282335-17539441&spd={speed}&per=1&aue=3";
 
-        //_Url = "https://tsn.baidu.com/text2audio?tex=" + AudioText + "&lan=zh&cuid=18-C0-4D-A7-1D-8E&ctp=1&tok=24.8707b30700694628a94c4e0c4496f670.2592000.1653460765.282335-26070831&vol=9&per=0&spd=5&pit=5&aue=3";
-        _Url =
-           $"http://tsn.baidu.com/text2audio?tex={AudioText}&lan=zh&ctp=1&cuid=18-C0-4D-A7-1D-8E&tok=24.c71bb71c42a3c53ce6d801c2fbb27f68.2592000.1653463945.282335-26070831&&vol=9&per=0&spd=5&pit=5&aue=3";
-      
-        using (UnityWebRequest _AudioWeb = UnityWebRequestMultimedia.GetAudioClip(UrlWrap(AudioText), AudioType.MPEG))
+        //过期_Url = "https://tsn.baidu.com/text2audio?tex=" + AudioText + "&lan=zh&cuid=18-C0-4D-A7-1D-8E&ctp=1&tok=24.8707b30700694628a94c4e0c4496f670.2592000.1653460765.282335-26070831&vol=9&per=0&spd=5&pit=5&aue=3";
+        //过期_Url =
+        //   $"http://tsn.baidu.com/text2audio?tex={AudioText}&lan=zh&ctp=1&cuid=18-C0-4D-A7-1D-8E&tok=24.c71bb71c42a3c53ce6d801c2fbb27f68.2592000.1653463945.282335-26070831&&vol=9&per=0&spd=5&pit=5&aue=3";
+
+        using (UnityWebRequest _AudioWeb = UnityWebRequestMultimedia.GetAudioClip(/*_Url*/UrlWrap_SouGou(AudioText), AudioType.MPEG))
         {
 
             yield return _AudioWeb.SendWebRequest();
@@ -83,13 +86,15 @@ public class TextToSpeech_ZH : MonoBehaviour
     /// <returns></returns>
     string UrlWrap(string AudioText)
     {
+        //AudioType.MPEG
         string url = $"http://tts.youdao.com/fanyivoice?word={AudioText}&le=zh&keyfrom=speaker-target";
         return url;
     }
-
+    //3,5,6,
     string UrlWrap_SouGou(string AudioText)
     {
-        string url = $"https://fanyi.sogou.com/reventondc/synthesis?text={AudioText}&speed=1&lang=zh-CHS&from=translateweb&speaker=6";
+        //AudioType.MPEG
+        string url = $"https://fanyi.sogou.com/reventondc/synthesis?text={AudioText}&speed=1&lang=zh-CHS&from=translateweb&speaker=4&speaking_rate=1.3";
         return url;
     }
 
